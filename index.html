@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Signal — HR Intelligence for What's Next</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0b0c0f;
+    --bg-2:      #111318;
+    --bg-3:      #181a20;
+    --ink:       #eeedf0;
+    --ink-mid:   #b0b2bc;
+    --ink-soft:  #70727e;
+    --ink-faint: #3a3c46;
+    --signal:    #e8c84a;
+    --signal-dim:#a88d2e;
+    --signal-bg: rgba(232,200,74,0.07);
+    --teal:      #4ecdc4;
+    --teal-bg:   rgba(78,205,196,0.07);
+    --coral:     #e8715a;
+    --coral-bg:  rgba(232,113,90,0.07);
+    --violet:    #a78bfa;
+    --violet-bg: rgba(167,139,250,0.07);
+    --green:     #6ee7b7;
+    --green-bg:  rgba(110,231,183,0.07);
+    --blue:      #60a5fa;
+    --blue-bg:   rgba(96,165,250,0.07);
+    --orange:    #fb923c;
+    --orange-bg: rgba(251,146,60,0.07);
+    --rose:      #f472b6;
+    --rose-bg:   rgba(244,114,182,0.07);
+    --border:    rgba(238,237,240,0.08);
+    --border-md: rgba(238,237,240,0.14);
+    --radius:    12px;
+    --radius-sm: 7px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+
+  /* ── ANIMATED BACKGROUND GLOW ── */
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+
+  .glow-orb {
+    position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.12;
+    animation: drift 20s ease-in-out infinite alternate;
+  }
+
+  .glow-1 { width: 600px; height: 600px; background: var(--signal); top: -200px; left: -100px; animation-delay: 0s; }
+  .glow-2 { width: 400px; height: 400px; background: var(--teal); bottom: -100px; right: -100px; animation-delay: -7s; }
+  .glow-3 { width: 300px; height: 300px; background: var(--violet); top: 40%; left: 50%; animation-delay: -14s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.08); }
+  }
+
+  /* ── ALL CONTENT ABOVE BG ── */
+  .site-wrap { position: relative; z-index: 1; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,12,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1140px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; gap: 1rem;
+  }
+
+  .nav-logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px; font-weight: 500; color: var(--signal);
+    letter-spacing: 0.04em; text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .nav-logo::before {
+    content: '';
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--signal);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+
+  .nav-link {
+    font-size: 13px; color: var(--ink-soft); text-decoration: none;
+    padding: 5px 10px; border-radius: var(--radius-sm);
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-link:hover { color: var(--ink); background: rgba(238,237,240,0.05); }
+
+  .nav-cta {
+    font-size: 12px; font-weight: 500;
+    padding: 6px 14px; border-radius: 20px;
+    border: 1px solid var(--signal-dim);
+    color: var(--signal); text-decoration: none;
+    transition: all 0.15s; white-space: nowrap;
+  }
+
+  .nav-cta:hover { background: var(--signal-bg); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 88vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--signal); letter-spacing: 0.18em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--signal-dim);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 600; line-height: 0.95;
+    color: var(--ink); letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title em {
+    font-style: italic; color: var(--signal);
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    color: var(--ink-mid); font-weight: 400; font-style: italic;
+    margin-bottom: 1.75rem; max-width: 560px;
+  }
+
+  .hero-desc {
+    font-size: 15px; color: var(--ink-soft);
+    line-height: 1.75; max-width: 580px; margin-bottom: 2.5rem;
+  }
+
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+  .btn-primary {
+    font-size: 13px; font-weight: 500; padding: 11px 24px;
+    border-radius: 24px; background: var(--signal);
+    color: #0b0c0f; border: none; cursor: pointer;
+    text-decoration: none; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .btn-primary:hover { background: #f0d060; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(232,200,74,0.25); }
+
+  .btn-secondary {
+    font-size: 13px; font-weight: 400; padding: 11px 24px;
+    border-radius: 24px; border: 1px solid var(--border-md);
+    color: var(--ink-mid); text-decoration: none;
+    transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .btn-secondary:hover { border-color: var(--ink-soft); color: var(--ink); background: rgba(238,237,240,0.04); }
+
+  /* hero scroll indicator */
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--ink-faint); letter-spacing: 0.1em;
+    text-transform: uppercase; font-family: 'IBM Plex Mono', monospace;
+    animation: bob 2s ease-in-out infinite;
+  }
+
+  @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  .scroll-hint svg { opacity: 0.4; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1140px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500; color: var(--signal);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+  }
+
+  .section-label::after { content: ''; flex: 0 0 32px; height: 1px; background: var(--signal-dim); }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 600; color: var(--ink);
+    line-height: 1.15; margin-bottom: 1rem;
+  }
+
+  .section-desc { font-size: 15px; color: var(--ink-soft); line-height: 1.75; max-width: 600px; }
+
+  /* ── SIGNAL METRICS ── */
+  .metrics-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-2);
+  }
+
+  .metrics-strip .section-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0;
+  }
+
+  .metric-item {
+    padding: 2rem 2rem;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .metric-item:last-child { border-right: none; }
+
+  .metric-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 600; color: var(--signal);
+    line-height: 1; display: block;
+  }
+
+  .metric-label { font-size: 12px; color: var(--ink-soft); margin-top: 6px; line-height: 1.4; }
+
+  /* ── TOPIC TILES ── */
+  .topics-section { background: var(--bg); }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .topic-tile {
+    background: var(--bg-2);
+    padding: 2rem;
+    text-decoration: none;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: background 0.2s;
+    position: relative; overflow: hidden;
+  }
+
+  .topic-tile::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--tile-accent-bg, transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+
+  .topic-tile:hover { background: var(--bg-3); }
+  .topic-tile:hover::before { opacity: 1; }
+  .topic-tile:hover .tile-arrow { transform: translate(3px, -3px); }
+  .topic-tile:hover .tile-title { color: var(--tile-accent, var(--ink)); }
+
+  .tile-top { display: flex; justify-content: space-between; align-items: flex-start; }
+
+  .tile-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .tile-arrow {
+    font-size: 16px; color: var(--ink-faint);
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  .topic-tile:hover .tile-arrow { color: var(--tile-accent, var(--ink-mid)); }
+
+  .tile-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--tile-accent, var(--ink-soft));
+  }
+
+  .tile-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 600; color: var(--ink);
+    line-height: 1.2; transition: color 0.2s;
+  }
+
+  .tile-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.65; flex: 1; }
+
+  .tile-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; padding-top: 0.5rem; }
+
+  .tile-tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 8px;
+    background: rgba(238,237,240,0.05); color: var(--ink-soft);
+    border: 1px solid var(--border); letter-spacing: 0.03em;
+  }
+
+  /* ── WHY THE SIGNAL ── */
+  .why-section { background: var(--bg-2); }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px; margin-top: 3rem;
+  }
+
+  .why-card {
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-3);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .why-card:hover { border-color: var(--border-md); transform: translateY(-2px); }
+
+  .why-icon {
+    font-size: 1.5rem; margin-bottom: 1rem; display: block;
+  }
+
+  .why-title { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+  .why-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+
+  /* ── CURATOR ── */
+  .curator-section { background: var(--bg); }
+
+  .curator-card {
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 2.5rem; align-items: start;
+    padding: 2.5rem; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--bg-2);
+    margin-top: 3rem;
+  }
+
+  .curator-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #1a2a40, #2a3f5a);
+    border: 1px solid var(--border-md);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: var(--signal); flex-shrink: 0;
+  }
+
+  .curator-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 600; color: var(--ink); margin-bottom: 4px;
+  }
+
+  .curator-title { font-size: 13px; color: var(--signal); font-weight: 500; margin-bottom: 12px; }
+
+  .curator-bio { font-size: 14px; color: var(--ink-soft); line-height: 1.75; margin-bottom: 1.25rem; max-width: 680px; }
+
+  .curator-companies { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 1.25rem; }
+
+  .company-chip {
+    font-size: 11px; padding: 3px 10px; border-radius: 12px;
+    border: 1px solid var(--border-md); color: var(--ink-soft);
+    background: rgba(238,237,240,0.04);
+  }
+
+  .company-chip.current {
+    background: var(--signal-bg); color: var(--signal);
+    border-color: var(--signal-dim);
+  }
+
+  .curator-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .curator-link {
+    font-size: 12px; padding: 6px 14px; border-radius: 16px;
+    border: 1px solid var(--border-md); color: var(--ink-mid);
+    text-decoration: none; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+
+  .curator-link:hover { border-color: var(--signal-dim); color: var(--signal); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-2);
+    padding: 3rem 2rem 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1140px; margin: 0 auto;
+  }
+
+  .footer-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;
+    padding-bottom: 2rem; border-bottom: 1px solid var(--border);
+  }
+
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px; font-weight: 500; color: var(--signal);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+
+  .footer-brand::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--signal);
+  }
+
+  .footer-tagline { font-size: 12px; color: var(--ink-soft); max-width: 280px; line-height: 1.6; }
+
+  .footer-nav { display: flex; flex-direction: column; gap: 8px; }
+  .footer-nav-title { font-size: 11px; font-weight: 500; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+
+  .footer-link {
+    font-size: 13px; color: var(--ink-soft); text-decoration: none; transition: color 0.12s;
+  }
+
+  .footer-link:hover { color: var(--signal); }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 0.5rem;
+  }
+
+  .footer-copy { font-size: 11px; color: var(--ink-faint); font-family: 'IBM Plex Mono', monospace; }
+  .footer-right { font-size: 11px; color: var(--ink-faint); }
+
+  /* ── DIVIDER ── */
+  .rule { width: 100%; height: 1px; background: var(--border); }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .curator-card { grid-template-columns: 1fr; gap: 1.5rem; }
+    .nav-links { display: none; }
+    .metrics-strip .section-inner { grid-template-columns: repeat(2, 1fr); }
+    .metric-item:nth-child(2) { border-right: none; }
+    .hero { min-height: 80vh; padding-top: 4rem; }
+    .footer-top { flex-direction: column; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-actions { flex-direction: column; align-items: center; }
+    .topics-grid { grid-template-columns: 1fr; }
+    section { padding: 3rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-orb glow-1"></div>
+  <div class="glow-orb glow-2"></div>
+  <div class="glow-orb glow-3"></div>
+</div>
+
+<div class="site-wrap">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">THE SIGNAL</a>
+    <div class="nav-links">
+      <a href="#topics" class="nav-link">Topics</a>
+      <a href="#why" class="nav-link">About</a>
+      <a href="#curator" class="nav-link">Curator</a>
+    </div>
+    <a href="https://www.linkedin.com/in/alexrivera1/" target="_blank" class="nav-cta">Connect on LinkedIn →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="position:relative;">
+  <div class="hero-eyebrow fade-up">HR Intelligence for What's Next</div>
+  <h1 class="hero-title fade-up delay-1">The <em>Signal</em></h1>
+  <p class="hero-subtitle fade-up delay-2">Curated by Alex Rivera — Agent for Change</p>
+  <p class="hero-desc fade-up delay-3">
+    A curated intelligence hub for HR leaders, talent acquisition professionals, and HR tech practitioners navigating the AI transformation. Eight topic domains. One source of signal.
+  </p>
+  <div class="hero-actions fade-up delay-4">
+    <a href="#topics" class="btn-primary">Explore Topics ↓</a>
+    <a href="#curator" class="btn-secondary">About the Curator</a>
+  </div>
+  <div class="scroll-hint">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2v10M3 8l4 4 4-4"/></svg>
+    scroll
+  </div>
+</section>
+
+<!-- METRICS STRIP -->
+<div class="metrics-strip">
+  <div class="section-inner">
+    <div class="metric-item">
+      <span class="metric-val">8</span>
+      <div class="metric-label">Topic domains covered</div>
+    </div>
+    <div class="metric-item">
+      <span class="metric-val">26+</span>
+      <div class="metric-label">Curated sources tracked</div>
+    </div>
+    <div class="metric-item">
+      <span class="metric-val">15+</span>
+      <div class="metric-label">Years of practitioner experience</div>
+    </div>
+    <div class="metric-item">
+      <span class="metric-val">30%</span>
+      <div class="metric-label">HR roles impacted by agentic AI by 2027</div>
+    </div>
+    <div class="metric-item">
+      <span class="metric-val">∞</span>
+      <div class="metric-label">Signal-to-noise ratio goal</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOPIC TILES -->
+<section class="topics-section" id="topics">
+  <div class="section-inner">
+    <div class="section-label">Intelligence Domains</div>
+    <h2 class="section-title">Eight lenses.<br>One hub.</h2>
+    <p class="section-desc">Each domain delivers curated sources, frameworks, thought leaders, and emerging developments — filtered for relevance, not volume.</p>
+
+    <div class="topics-grid">
+
+      <!-- Risk & Compliance -->
+      <a href="#" class="topic-tile" style="--tile-accent:#e8715a; --tile-accent-bg:rgba(232,113,90,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--coral-bg); border-color:rgba(232,113,90,0.2);">⚖️</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">Risk & Compliance</div>
+        <div class="tile-title">AI Regulation & Legal Exposure</div>
+        <div class="tile-desc">Tracks AI legislation, employment law updates, data privacy mandates, and compliance frameworks affecting HR systems and workforce processes.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">AI Act</span>
+          <span class="tile-tag">EEOC</span>
+          <span class="tile-tag">Data Privacy</span>
+          <span class="tile-tag">Audits</span>
+        </div>
+      </a>
+
+      <!-- Immigration -->
+      <a href="#" class="topic-tile" style="--tile-accent:#fb923c; --tile-accent-bg:rgba(251,146,60,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--orange-bg); border-color:rgba(251,146,60,0.2);">🌐</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">Immigration</div>
+        <div class="tile-title">Workforce Mobility & Visa Policy</div>
+        <div class="tile-desc">H-1B caps, PERM timelines, I-9 compliance, E-Verify mandates, and global mobility trends — critical for tech companies building international talent pipelines.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">H-1B</span>
+          <span class="tile-tag">PERM</span>
+          <span class="tile-tag">I-9</span>
+          <span class="tile-tag">E-Verify</span>
+        </div>
+      </a>
+
+      <!-- Talent Acquisition -->
+      <a href="https://agentforchange-hr-tech.github.io/hr-tech-intel/" target="_blank" class="topic-tile" style="--tile-accent:#4ecdc4; --tile-accent-bg:rgba(78,205,196,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--teal-bg); border-color:rgba(78,205,196,0.2);">🎯</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">Talent Acquisition</div>
+        <div class="tile-title">Recruiting Intelligence & TA Tech</div>
+        <div class="tile-desc">Sourcing automation, ATS platforms, recruiting analytics, AI-enabled hiring workflows, and the tools redefining how organizations attract and select talent.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">ATS</span>
+          <span class="tile-tag">Sourcing AI</span>
+          <span class="tile-tag">Analytics</span>
+          <span class="tile-tag">Automation</span>
+        </div>
+      </a>
+
+      <!-- HR Tech & Agentic AI -->
+      <a href="#" class="topic-tile" style="--tile-accent:#e8c84a; --tile-accent-bg:rgba(232,200,74,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--signal-bg); border-color:rgba(232,200,74,0.2);">🤖</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">HR Tech & Agentic AI</div>
+        <div class="tile-title">Platforms, Agents & the AI Stack</div>
+        <div class="tile-desc">The agentic AI revolution in HR — Superagents, the 5-layer architecture, Workday, ServiceNow, SAP, and what the next generation of HR platforms looks like.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">Agentic AI</span>
+          <span class="tile-tag">HCM</span>
+          <span class="tile-tag">Superagents</span>
+          <span class="tile-tag">Platforms</span>
+        </div>
+      </a>
+
+      <!-- HR Transformation -->
+      <a href="#" class="topic-tile" style="--tile-accent:#a78bfa; --tile-accent-bg:rgba(167,139,250,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--violet-bg); border-color:rgba(167,139,250,0.2);">⚡</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">HR Transformation</div>
+        <div class="tile-title">Redesigning the HR Function</div>
+        <div class="tile-desc">Systemic HR, operating model redesign, CHRO leadership, and how organizations are restructuring HR from siloed COEs to integrated, AI-enabled operations.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">Systemic HR</span>
+          <span class="tile-tag">Operating Model</span>
+          <span class="tile-tag">CHRO</span>
+          <span class="tile-tag">COE</span>
+        </div>
+      </a>
+
+      <!-- L&D & Skills -->
+      <a href="#" class="topic-tile" style="--tile-accent:#6ee7b7; --tile-accent-bg:rgba(110,231,183,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--green-bg); border-color:rgba(110,231,183,0.2);">📚</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">L&D & Skills</div>
+        <div class="tile-title">Learning Infrastructure & Skills Intelligence</div>
+        <div class="tile-desc">Skills-based organizations, AI learning platforms, upskilling infrastructure, and how companies are building learning ecosystems that keep pace with technology change.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">Skills-Based</span>
+          <span class="tile-tag">LXP</span>
+          <span class="tile-tag">Upskilling</span>
+          <span class="tile-tag">AI Learning</span>
+        </div>
+      </a>
+
+      <!-- People Analytics -->
+      <a href="#" class="topic-tile" style="--tile-accent:#60a5fa; --tile-accent-bg:rgba(96,165,250,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--blue-bg); border-color:rgba(96,165,250,0.2);">📊</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">People Analytics</div>
+        <div class="tile-title">Data-Driven Workforce Intelligence</div>
+        <div class="tile-desc">People data infrastructure, workforce planning models, predictive analytics, and the frameworks enabling HR to make evidence-based decisions at scale.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">Workforce Planning</span>
+          <span class="tile-tag">Predictive</span>
+          <span class="tile-tag">Data Governance</span>
+          <span class="tile-tag">KPIs</span>
+        </div>
+      </a>
+
+      <!-- Future of Work -->
+      <a href="#" class="topic-tile" style="--tile-accent:#f472b6; --tile-accent-bg:rgba(244,114,182,0.04);">
+        <div class="tile-top">
+          <div class="tile-icon" style="background:var(--rose-bg); border-color:rgba(244,114,182,0.2);">🔭</div>
+          <span class="tile-arrow">↗</span>
+        </div>
+        <div class="tile-label">Future of Work</div>
+        <div class="tile-title">Work 2030 & Workforce Futures</div>
+        <div class="tile-desc">The long horizon — Superworkers, HR 2030 vision, workforce demographics, hybrid work evolution, and the macro forces reshaping how and where work gets done.</div>
+        <div class="tile-tags">
+          <span class="tile-tag">Work 2030</span>
+          <span class="tile-tag">Superworker</span>
+          <span class="tile-tag">Hybrid</span>
+          <span class="tile-tag">Macro Trends</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY THE SIGNAL -->
+<section class="why-section" id="why">
+  <div class="section-inner">
+    <div class="section-label">Why The Signal</div>
+    <h2 class="section-title">Built for practitioners.<br>Useful for leaders.</h2>
+    <p class="section-desc">The HR intelligence landscape is noisy. The Signal filters it — surfacing what actually matters across the domains reshaping the profession.</p>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-icon">🎯</span>
+        <div class="why-title">Practitioner-curated</div>
+        <div class="why-desc">Built by someone who has actually implemented enterprise ATS migrations, recruiting automation platforms, and analytics frameworks — not just written about them.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🔭</span>
+        <div class="why-title">Multi-horizon coverage</div>
+        <div class="why-desc">From daily operational intelligence to quarterly analyst reports to 2030 macro trends — each topic page covers the right time horizon for the right decisions.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🔗</span>
+        <div class="why-title">Connected across domains</div>
+        <div class="why-desc">Risk & compliance affects recruiting workflows. Immigration shapes talent pipelines. Agentic AI touches every domain. The Signal shows the connections, not just the topics.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">⚡</span>
+        <div class="why-title">Always current</div>
+        <div class="why-desc">Sources are reviewed quarterly and updated as the landscape shifts. What's listed here has been evaluated — not just scraped from a directory.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURATOR -->
+<section class="curator-section" id="curator">
+  <div class="section-inner">
+    <div class="section-label">The Curator</div>
+    <h2 class="section-title">Behind the signal.</h2>
+
+    <div class="curator-card">
+      <div class="curator-avatar">AR</div>
+      <div>
+        <div class="curator-name">Alex Rivera</div>
+        <div class="curator-title">Product Manager, HR Transformation · Marvell Technology</div>
+        <p class="curator-bio">
+          15+ years building the systems, data infrastructure, and workflows that power modern recruiting organizations. Work sits at the intersection of Recruiting Operations, Talent Systems, and People Analytics — with a rare combination of hands-on experience across accounting, finance, marketing ops, sales ops, and system deployment. Particularly focused on how automation and agentic AI can enhance recruiting workflows and hiring infrastructure at scale.
+        </p>
+        <div class="curator-companies">
+          <span class="company-chip current">Marvell Technology</span>
+          <span class="company-chip">CSL Behring</span>
+          <span class="company-chip">GRAIL</span>
+          <span class="company-chip">Gilead Sciences</span>
+          <span class="company-chip">Walmart</span>
+        </div>
+        <div class="curator-links">
+          <a href="https://www.linkedin.com/in/alexrivera1/" target="_blank" class="curator-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://agentforchange-hr-tech.github.io/hr-tech-intel/" target="_blank" class="curator-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            Talent Acquisition Hub
+          </a>
+          <a href="https://github.com/agentforchange-hr-tech" target="_blank" class="curator-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">THE SIGNAL</div>
+        <p class="footer-tagline">HR intelligence for what's next. Eight domains. One curator. Zero noise.</p>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-title">Topic Domains</div>
+        <a href="#" class="footer-link">Risk & Compliance</a>
+        <a href="#" class="footer-link">Immigration</a>
+        <a href="https://agentforchange-hr-tech.github.io/hr-tech-intel/" target="_blank" class="footer-link">Talent Acquisition</a>
+        <a href="#" class="footer-link">HR Tech & Agentic AI</a>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-title">&nbsp;</div>
+        <a href="#" class="footer-link">HR Transformation</a>
+        <a href="#" class="footer-link">L&D & Skills</a>
+        <a href="#" class="footer-link">People Analytics</a>
+        <a href="#" class="footer-link">Future of Work</a>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-title">Connect</div>
+        <a href="https://www.linkedin.com/in/alexrivera1/" target="_blank" class="footer-link">LinkedIn</a>
+        <a href="https://github.com/agentforchange-hr-tech" target="_blank" class="footer-link">GitHub</a>
+        <a href="#curator" class="footer-link">About the Curator</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© <span id="yr"></span> The Signal · Curated by Alex Rivera</div>
+      <div class="footer-right">Agent for Change · HR Intelligence Hub</div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /site-wrap -->
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+
+</body>
+</html>
