@@ -469,6 +469,39 @@
   .delay-4 { animation-delay: 0.4s; }
   .delay-5 { animation-delay: 0.5s; }
 
+
+  /* ── SIGNAL ALERT BANNER ── */
+  .signal-alert-banner {
+    display: none; /* Activated by SIGNAL_ALERT_ACTIVE = true in JS */
+    background: var(--coral-light, #fdecea);
+    border-bottom: 2px solid var(--coral, #c94f35);
+    padding: 0.75rem 2rem;
+    position: relative;
+    z-index: 99;
+  }
+  body.dark .signal-alert-banner {
+    background: rgba(201,79,53,0.12);
+  }
+  .signal-alert-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  }
+  .signal-alert-content {
+    display: flex; align-items: center; gap: 10px; flex: 1;
+  }
+  .signal-alert-dot {
+    font-size: 14px; flex-shrink: 0;
+  }
+  .signal-alert-text {
+    font-size: 13px; color: var(--coral, #c94f35); font-weight: 500; line-height: 1.4;
+  }
+  .signal-alert-link {
+    font-size: 12px; color: var(--coral, #c94f35); text-decoration: underline; white-space: nowrap; flex-shrink: 0;
+  }
+  .signal-alert-dismiss {
+    background: none; border: none; cursor: pointer; color: var(--coral, #c94f35);
+    font-size: 16px; padding: 0 4px; flex-shrink: 0;
+  }
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .curator-card { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -484,7 +517,147 @@
     .topics-grid { grid-template-columns: 1fr; }
     section { padding: 3rem 1.25rem; }
   }
+
+  /* ── DESIGN REFRESH v2 — typography, contrast, mobile ── */
+  /* Increased font sizes for 35-60 age range readability */
+  .source-desc, .insight-desc, .platform-desc, .visa-desc, .trend-desc, .check-desc, .framework-desc {
+    font-size: 14px !important;
+    line-height: 1.75 !important;
+    color: var(--ink-mid) !important;
+  }
+  .source-name, .insight-name, .platform-name, .visa-name, .trend-name, .check-title, .framework-name, .rhythm-what {
+    font-size: 14px !important;
+  }
+  .card-title, .feed-title, .stat-label, .hero-breadcrumb, .rhythm-when {
+    font-size: 12px !important;
+  }
+  .stat-sub, .feed-item-date, .feed-item-source, .feed-footer-note, .reviewed-notice {
+    font-size: 12px !important;
+    color: var(--ink-soft) !important;
+  }
+  .brief-text { font-size: 14px !important; }
+  .brief-link, .rhythm-row { line-height: 1.75 !important; }
+  .card { padding: 1.5rem 1.75rem !important; }
+  /* Mobile tap targets */
+  @media (max-width: 768px) {
+    .tab-btn { min-height: 44px !important; padding: 10px 14px !important; font-size: 13px !important; }
+    .feed-tab { min-height: 36px !important; padding: 8px 12px !important; }
+    .hdr-btn { min-height: 36px !important; }
+    .pill { min-height: 36px !important; padding: 8px 14px !important; }
+    .site-header { padding: 0 1rem !important; }
+    .header-title .subtitle { display: none !important; }
+    .tab-bar { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch !important; padding-bottom: 5px !important; }
+    .tab-bar::-webkit-scrollbar { height: 2px !important; }
+    .page-hero { padding: 2rem 1.25rem 1.5rem !important; }
+    .page-hero h1 { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
+    .main { padding: 1rem 1rem 2rem !important; }
+    .stat-strip { grid-template-columns: repeat(2, 1fr) !important; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr !important; }
+    .header-inner { padding: 0.75rem 0 !important; }
+    .urgency-items { display: none !important; }
+  }
+  @media (max-width: 480px) {
+    .hero-meta { gap: 6px !important; }
+    .meta-chip { font-size: 10px !important; padding: 3px 8px !important; }
+    .stat-val { font-size: 1.6rem !important; }
+  }
+
+  /* ── NEWSLETTER CTA ── */
+  .newsletter-cta {
+    display: flex;
+    align-items: center; justify-content: space-between;
+    gap: 1.5rem; flex-wrap: wrap;
+    background: var(--accent-light, #e8f0fb);
+    border: 1px solid rgba(0,102,204,0.2);
+    border-radius: var(--radius, 10px);
+    padding: 1.25rem 1.5rem; margin-top: 16px;
+  }
+  .cta-text h3 { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .cta-text p { font-size: 13px; color: var(--ink-soft); }
+  .cta-btn {
+    font-size: 13px; font-weight: 500; padding: 9px 22px;
+    border-radius: 22px; background: var(--accent, #0066cc); color: white;
+    text-decoration: none; white-space: nowrap; transition: all 0.15s;
+    border: none; cursor: pointer; flex-shrink: 0;
+  }
+  .cta-btn:hover { background: var(--accent-mid, #4d94e0); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,102,204,0.25); }
+  .footer-cta {
+    font-size: 13px; color: var(--ink-soft); text-align: center;
+    padding-top: 0.75rem; border-top: 1px solid var(--border); margin-top: 0.75rem;
+  }
+  .footer-cta a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .footer-cta a:hover { text-decoration: underline; }
+  .meta-cta-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; padding: 4px 12px; border-radius: 12px;
+    background: rgba(255,255,255,0.15); color: #fff;
+    border: 1px solid rgba(255,255,255,0.3); text-decoration: none;
+    transition: background 0.15s;
+  }
+  .meta-cta-chip:hover { background: rgba(255,255,255,0.25); }
+
+  /* ── ROLE FILTER ── */
+  .role-filter-section {
+    padding: 2rem 2rem 0;
+    max-width: 1140px; margin: 0 auto;
+  }
+  .role-filter-inner { }
+  .role-filter-label {
+    font-size: 11px; font-weight: 500; color: var(--ink-soft, #717585);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;
+  }
+  .role-filter-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem; font-weight: 400; color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .role-filter-grid {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.5rem;
+  }
+  .role-btn {
+    font-size: 13px; padding: 8px 16px; border-radius: 22px;
+    border: 1px solid var(--border-strong); background: var(--card-bg, #fff);
+    color: var(--ink-mid); cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s; min-height: 36px;
+  }
+  .role-btn:hover { background: var(--surface-alt); color: var(--ink); }
+  .role-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .role-btn-clear {
+    background: var(--coral-light, #fdecea); color: var(--coral, #c94f35);
+    border-color: var(--coral, #c94f35);
+  }
+  /* Tile highlight/fade */
+  .topic-tile { transition: opacity 0.2s, transform 0.2s; }
+  .topic-tile.faded { opacity: 0.35; }
+  .topic-tile.highlighted { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
 </style>
+
+  <!-- Google Analytics 4 — replace G-MGQ5MSQM2W with your real GA4 Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MGQ5MSQM2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MGQ5MSQM2W', {
+      page_title: document.title,
+      page_location: window.location.href
+    });
+    // Track tab clicks
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('tab-btn')) {
+        gtag('event', 'tab_click', {event_category: 'engagement', event_label: e.target.textContent.trim()});
+      }
+      if (e.target.id === 'share-btn' || e.target.closest('#share-btn')) {
+        gtag('event', 'share_click', {event_category: 'engagement', event_label: window.location.pathname});
+      }
+      if (e.target.classList.contains('feed-tab')) {
+        gtag('event', 'feed_tab_click', {event_category: 'engagement', event_label: e.target.textContent.trim()});
+      }
+      if (e.target.closest('.cta-btn') || e.target.classList.contains('cta-btn')) {
+        gtag('event', 'substack_cta_click', {event_category: 'conversion', event_label: window.location.pathname});
+      }
+    });
+  </script>
 </head>
 <body>
 
@@ -562,7 +735,7 @@
     <div class="topics-grid">
 
       <!-- Risk & Compliance -->
-      <a href="https://agentforchange-hr-tech.github.io/agentforchange-risk/" target="_blank" class="topic-tile" style="--tile-accent:var(--coral); --tile-accent-bg:rgba(201,79,53,0.04);">
+      <a href="https://agentforchange-hr-tech.github.io/agentforchange-risk/" target="_blank" class="topic-tile" style="--tile-accent:var(--coral); --tile-accent-bg:rgba(201,79,53,0.04);" data-domain="risk" data-domain="immigration" data-domain="ta" data-domain="hrtech" data-domain="hrtransform" data-domain="ld" data-domain="analytics" data-domain="fow">
         <div class="tile-top">
           <div class="tile-icon" style="background:var(--coral-bg); border-color:rgba(201,79,53,0.2);">⚖️</div>
           <span class="tile-arrow">↗</span>
@@ -613,7 +786,7 @@
       </a>
 
       <!-- HR Tech & Agentic AI -->
-      <a href="https://agentforchange-hr-tech.github.io/agentforchange-hrtech/" target="_blank" class="topic-tile" style="--tile-accent:var(--accent); --tile-accent-bg:rgba(0,102,204,0.04);">
+      <a href="#" class="topic-tile" style="--tile-accent:var(--accent); --tile-accent-bg:rgba(0,102,204,0.04);">
         <div class="tile-top">
           <div class="tile-icon" style="background:var(--accent-light); border-color:rgba(0,102,204,0.2);">🤖</div>
           <span class="tile-arrow">↗</span>
@@ -647,7 +820,7 @@
       </a>
 
       <!-- L&D & Skills -->
-      <a href="https://agentforchange-hr-tech.github.io/agentforchange-ld/" target="_blank" class="topic-tile" style="--tile-accent:#6ee7b7; --tile-accent-bg:rgba(110,231,183,0.04);">
+      <a href="#" class="topic-tile" style="--tile-accent:#6ee7b7; --tile-accent-bg:rgba(110,231,183,0.04);">
         <div class="tile-top">
           <div class="tile-icon" style="background:var(--green-bg); border-color:rgba(110,231,183,0.2);">📚</div>
           <span class="tile-arrow">↗</span>
@@ -743,7 +916,7 @@
       <div class="curator-avatar">AR</div>
       <div>
         <div class="curator-name">Alex Rivera</div>
-        <div class="curator-title">Product Manager, HR Transformation · Marvell Technology</div>
+        <div class="curator-title">Senior Product Manager, HR Systems and AI Enablement · Marvell Technology</div>
         <p class="curator-bio">
           15+ years building the systems, data infrastructure, and workflows that power modern recruiting organizations. Work sits at the intersection of Recruiting Operations, Talent Systems, and People Analytics — with a rare combination of hands-on experience across accounting, finance, marketing ops, sales ops, and system deployment. Particularly focused on how automation and agentic AI can enhance recruiting workflows and hiring infrastructure at scale.
         </p>
@@ -774,6 +947,62 @@
 </section>
 
 <!-- FOOTER -->
+
+  <!-- TRUST & QUALITY STATEMENT -->
+  <section class="trust-section">
+    <div class="trust-inner">
+      <div class="trust-label">Editorial Philosophy</div>
+      <div class="trust-quote">"The Signal HR does not publish every day. Neither does any intelligence source worth trusting."</div>
+      <div class="trust-body">
+        <p>What makes a source worth returning to is not how often it publishes — it is whether what it publishes is worth reading. The Signal HR is built on that principle.</p>
+        <p>Live RSS feeds surface what is happening in real time. Quarterly editorial reviews keep curated content accurate. Weekly newsletter synthesis distills what matters. Human-activated alerts flag what is urgent.</p>
+        <p>The goal is not to be everywhere. The goal is to be right — and to be there when it counts. That is the signal. Everything else is noise.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW THE SIGNAL HR WORKS — trust & transparency section -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="hiw-inner">
+      <div class="hiw-header">
+        <div class="hiw-label">Transparent by Design</div>
+        <h2 class="hiw-title">How The Signal HR works</h2>
+        <p class="hiw-desc">No surprises. No paywalls on what was free yesterday. Here is exactly what you get at every level.</p>
+      </div>
+      <div class="hiw-grid">
+        <div class="hiw-card">
+          <div class="hiw-card-icon">🌐</div>
+          <div class="hiw-card-tier">Free — Always</div>
+          <div class="hiw-card-name">The Platform</div>
+          <p class="hiw-card-desc">All 9 domain pages. All live RSS feeds. All source lists. All frameworks. All regulation trackers. Career pathways. Comparison hub overviews. No account required. No expiry.</p>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-card-icon">✉️</div>
+          <div class="hiw-card-tier">Free — Always</div>
+          <div class="hiw-card-name">The Newsletter</div>
+          <p class="hiw-card-desc">Weekly synthesis of what changed, what it means, and what to do about it. Written in a practitioner's voice. Delivered to your inbox. Always free.</p>
+          <a href="https://thesignalhr.substack.com/" target="_blank" class="hiw-cta">Subscribe free →</a>
+        </div>
+        <div class="hiw-card hiw-card-pro">
+          <div class="hiw-card-icon">⚡</div>
+          <div class="hiw-card-tier">$9/month · Founding rate locked</div>
+          <div class="hiw-card-name">The Signal HR Pro</div>
+          <p class="hiw-card-desc">Alex's practitioner take. Full comparison matrices. RFP question banks. Honest vendor assessments. Full compliance checklists. Quarterly deep-dives. Pro community access.</p>
+          <a href="https://thesignalhr.substack.com/" target="_blank" class="hiw-cta hiw-cta-pro">Join Pro →</a>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-card-icon">🎯</div>
+          <div class="hiw-card-tier">$500–$2,500/year · Limited seats</div>
+          <div class="hiw-card-name">Advisory</div>
+          <p class="hiw-card-desc">Direct access to Alex. Monthly 1:1 briefings. Custom research questions answered within 48 hours. Early access to comparison frameworks. For teams making high-stakes platform decisions.</p>
+          <a href="mailto:alex@thesignalhr.com" class="hiw-cta">Enquire →</a>
+        </div>
+      </div>
+      <div class="hiw-promise">
+        <strong>The promise:</strong> Content that is free today stays free. Pro subscribers who join during our founding period keep their rate forever. That is the model. We will not deviate from it.
+      </div>
+    </div>
+  </section>
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
@@ -807,6 +1036,7 @@
       <div class="footer-right">Agent for Change · HR Intelligence Hub</div>
     </div>
   </div>
+  <div style="max-width:1100px;margin:0.5rem auto 0;padding:0 2rem;font-size:11px;color:var(--ink-faint);text-align:center;">&copy; 2026 The Signal HR &middot; Alex Rivera. Content may be shared with attribution.</div>
 </footer>
 
 </div><!-- /site-wrap -->
@@ -831,6 +1061,43 @@
       if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
+
+  /* ── ROLE FILTER ── */
+  const ROLE_MAP = {
+    'recruiter':    ['ta','hrtech','immigration'],
+    'ta-ops':       ['ta','hrtech','analytics'],
+    'hris':         ['hrtech','analytics','hrtransform'],
+    'hr-ops':       ['hrtransform','hrtech','risk'],
+    'hrbp':         ['hrtransform','fow','analytics'],
+    'ld':           ['ld','fow','hrtech'],
+    'compensation': ['risk','analytics','fow'],
+    'immigration':  ['immigration','risk'],
+    'chro':         ['hrtech','hrtransform','fow','analytics','risk','immigration','ta','ld'],
+    'platform':     ['hrtech','analytics','ta'],
+    'breaking-in':  ['hrtech','hrtransform','ta'],
+  };
+
+  function filterByRole(btn) {
+    const role = btn.dataset.role;
+    const relevant = ROLE_MAP[role] || [];
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('clear-role-btn').style.display = 'inline-block';
+    document.querySelectorAll('.topic-tile').forEach(tile => {
+      const tileId = tile.dataset.domain || '';
+      const isRelevant = relevant.some(r => tileId.includes(r));
+      tile.classList.toggle('highlighted', isRelevant);
+      tile.classList.toggle('faded', !isRelevant);
+    });
+  }
+
+  function clearRoleFilter() {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('clear-role-btn').style.display = 'none';
+    document.querySelectorAll('.topic-tile').forEach(tile => {
+      tile.classList.remove('highlighted','faded');
+    });
+  }
 </script>
 
 </body>
