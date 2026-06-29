@@ -12,12 +12,12 @@
     --accent: #0066cc; --accent-light: #e8f0fb; --accent-mid: #4d94e0;
     --teal: #00897b; --teal-light: #e0f2f0;
     --amber: #c97a00; --amber-light: #fff3e0;
-    --coral: var(--coral); --coral-light: #fdecea;
+    --coral: #c94f35; --coral-light: #fdecea;
     --green: #2e7d32; --green-light: #e8f5e9;
-    --border: var(--border); --border-strong: var(--border-strong);
+    --border: rgba(15,17,23,0.1); --border-strong: rgba(15,17,23,0.18);
     --radius: 10px; --radius-sm: 6px;
     --shadow: 0 2px 12px rgba(15,17,23,0.07), 0 1px 3px rgba(15,17,23,0.05);
-    --shadow-md: 0 4px 24px var(--border), 0 2px 6px rgba(15,17,23,0.06);
+    --shadow-md: 0 4px 24px rgba(15,17,23,0.1), 0 2px 6px rgba(15,17,23,0.06);
     --header-bg: #ffffff; --body-bg: #f7f7f9; --card-bg: #ffffff;
   }
 
@@ -33,8 +33,7 @@
     --border: rgba(238,238,243,0.12); --border-strong: rgba(238,238,243,0.22);
     --header-bg: #14161e; --body-bg: #0f1117; --card-bg: #1a1c24;
   }
-  body.dark 
-  body.dark nav { background: rgba(255,255,255,0.92); }
+  body.dark nav { background: rgba(20,22,30,0.9); }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -47,24 +46,6 @@
     min-height: 100vh;
     transition: background 0.2s, color 0.2s;
     overflow-x: hidden;
-  }
-
-  /* ── NOISE TEXTURE OVERLAY ── */
-  
-  
-
-  /* ── ANIMATED BACKGROUND GLOW ── */
-  
-  body.dark 
-
-  
-
-  
-  
-  
-
-  
-    to   { transform: translate(40px, 30px) scale(1.08); }
   }
 
   /* ── ALL CONTENT ABOVE BG ── */
@@ -660,10 +641,6 @@
   </script>
 </head>
 <body>
-
-<div class="glow-orb glow-2"></div>
-  <div class="glow-orb glow-3"></div>
-</div>
 
 <div class="site-wrap">
 
